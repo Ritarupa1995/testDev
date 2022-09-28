@@ -75,11 +75,15 @@ public final class DecodeThread extends Thread {
         hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
     }
 
-    public Handler getHandler() {
+public Handler getHandler() {
         try {
             handlerInitLatch.await();
         } catch (InterruptedException ie) {
-            // continue?
+            logger.error("InterruptedException: ", ie);
+            Thread.currentThread().interrupt();
+        }
+        catch (ExecutionException ee) {
+            logger.error("ExecutionException: ",ee);
         }
         return handler;
     }
